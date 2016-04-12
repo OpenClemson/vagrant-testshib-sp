@@ -40,6 +40,21 @@ if [ -f "${MD_FILENAME_CACHE}" ]; then
       exit 1
     fi
   fi
+else
+  # If we haven't uploaded metadata yet, check Testshib's entity list to make sure
+  # we're not using a conflicting hostname.
+  SCRIPTS_DIR=$(cd $(dirname $0); pwd -P)
+  MD_ENTITY_ID=$(grep -o 'entityID="[^"]\+' "${MD_FILE}" | sed 's/^entityID="//')
+  echo "entityID = ${MD_ENTITY_ID}"
+  echo "Checking for conflicting entities..."
+  if "${SCRIPTS_DIR}/testshib-entity-list.sh" | grep --quiet "${MD_ENTITY_ID}"; then
+    warn "${MD_ENTITY_ID} is already present in Testshib.org's entity list"
+    if ! confirm; then
+      exit 1
+    fi
+  else
+    echo "None found"
+  fi
 fi
 echo "${MD_FILE}" > "${MD_FILENAME_CACHE}"
 
