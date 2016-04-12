@@ -44,6 +44,15 @@ apache-servername-ssl:
     - repl: ServerName {{ salt["network"].get_hostname() }}:443
     - show_changes: True
 
+use-canonical-name:
+  file.line:
+    - name: /etc/httpd/conf/httpd.conf
+    - content: UseCanonicalName On
+    - after: ServerName {{ salt["network"].get_hostname() }}:80
+    - mode: Insert
+    - indent: True
+    - show_changes: True
+
 # See https://www.vagrantup.com/docs/synced-folders/virtualbox.html
 disable-sendfile:
   file.replace:
