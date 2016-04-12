@@ -17,6 +17,7 @@ httpd-service:
       - pkg: php
     - watch:
       - file: /etc/httpd/conf/httpd.conf
+      - file: /etc/httpd/conf.d/ssl.conf
 
 apache-docroot-configuration:
   file.blockreplace:
@@ -24,6 +25,20 @@ apache-docroot-configuration:
     - marker_start: <Directory "/var/www/html">
     - marker_end: </Directory>
     - source: salt://files/docroot_directory.conf
+    - show_changes: True
+
+apache-servername:
+  file.replace:
+    - name: /etc/httpd/conf/httpd.conf
+    - pattern: ^#?ServerName .+
+    - repl: ServerName {{ salt["network"].get_hostname() }}:80
+    - show_changes: True
+
+apache-servername-ssl:
+  file.replace:
+    - name: /etc/httpd/conf.d/ssl.conf
+    - pattern: ^#?ServerName .+
+    - repl: ServerName {{ salt["network"].get_hostname() }}:443
     - show_changes: True
 
 # See https://www.vagrantup.com/docs/synced-folders/virtualbox.html
