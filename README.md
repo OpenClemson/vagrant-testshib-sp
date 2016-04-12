@@ -27,5 +27,5 @@ users to authenticate with Shibboleth.
 
 6. After uploading metadata, restart `shibd` and Apache. `systemctl restart shibd && systemctl restart httpd`.
 
-7. Open [https://sp.vagrant.test](https://sp.vagrant.test) in a browser. You should be redirected to Testshib to
-   authenticate.
+7. Open https://<hostname> in a browser, where hostname is what you set in step 2. You should be redirected to
+   Testshib to authenticate.
