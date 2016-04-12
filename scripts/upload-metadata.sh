@@ -30,9 +30,10 @@ confirm () {
 # Cache the filename so that any attempt to upload metadata with a different filename
 # will warn and prompt for confirmation
 MD_FILENAME_CACHE="${HOME}/.testshib-metadata-filename.txt"
+MD_FILENAME=$(basename "${MD_FILE}")
 if [ -f "${MD_FILENAME_CACHE}" ]; then
   CACHED_MD_FILENAME=$(cat "${MD_FILENAME_CACHE}" | tr -d '[[:space:]]')
-  if [ ! "${CACHED_MD_FILENAME}" == "${MD_FILE}" ]; then
+  if [ ! "${CACHED_MD_FILENAME}" == "${MD_FILENAME}" ]; then
     warn "Testshib requires using the same filename to change uploaded metadata"
     warn "See http://www.testshib.org/register.html"
     warn "Metadata was last uploaded as '${CACHED_MD_FILENAME}'"
@@ -56,7 +57,7 @@ else
     echo "None found"
   fi
 fi
-echo "${MD_FILE}" > "${MD_FILENAME_CACHE}"
+echo "${MD_FILENAME}" > "${MD_FILENAME_CACHE}"
 
 echo "Uploading metadata to testshib..."
 curl --form userfile=@"${MD_FILE}" "https://www.testshib.org/procupload.php"
