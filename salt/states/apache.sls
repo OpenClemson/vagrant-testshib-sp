@@ -24,7 +24,10 @@ apache-docroot-configuration:
     - name: /etc/httpd/conf/httpd.conf
     - marker_start: <Directory "/var/www/html">
     - marker_end: </Directory>
-    - source: salt://files/docroot_directory.conf
+    - content: |2
+            Options Indexes FollowSymLinks
+            Require all granted
+            AllowOverride All
     - show_changes: True
 
 apache-servername:
