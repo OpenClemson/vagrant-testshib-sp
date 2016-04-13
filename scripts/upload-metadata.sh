@@ -29,7 +29,7 @@ confirm () {
 # See http://www.testshib.org/register.html
 # Cache the filename so that any attempt to upload metadata with a different filename
 # will warn and prompt for confirmation
-MD_FILENAME_CACHE="${HOME}/.testshib-metadata-filename.txt"
+MD_FILENAME_CACHE="/etc/vagrant-testshib-sp/testshib-metadata-filename"
 MD_FILENAME=$(basename "${MD_FILE}")
 if [ -f "${MD_FILENAME_CACHE}" ]; then
   CACHED_MD_FILENAME=$(cat "${MD_FILENAME_CACHE}" | tr -d '[[:space:]]')
@@ -58,6 +58,8 @@ else
   fi
 fi
 echo "${MD_FILENAME}" > "${MD_FILENAME_CACHE}"
+chown vagrant:vagrant "${MD_FILENAME_CACHE}"
+chmod 664 "${MD_FILENAME_CACHE}"
 
 echo "Uploading metadata to testshib..."
 curl --form userfile=@"${MD_FILE}" "https://www.testshib.org/procupload.php"

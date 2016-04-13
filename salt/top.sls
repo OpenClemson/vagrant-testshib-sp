@@ -4,4 +4,4 @@ base:
     - states.selinux
     - states.shibboleth-sp
     - states.apache
-    - states.tools
+    - states.misc
