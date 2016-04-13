@@ -58,6 +58,8 @@ disable-sendfile:
   file.replace:
     - name: /etc/httpd/conf/httpd.conf
     - pattern: ^EnableSendfile on
-    - flags: ["IGNORECASE", "MULTILINE"]
+    - flags:
+      - IGNORECASE
+      - MULTILINE
     - repl: EnableSendfile Off
     - show_changes: True
