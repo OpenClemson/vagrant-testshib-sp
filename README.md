@@ -11,6 +11,8 @@ users to authenticate with Shibboleth.
 
 2. You should set the hostname in `Vagrantfile` to something unique. This will be used to construct the SP's
    SAML [`entityID`](https://wiki.shibboleth.net/confluence/display/CONCEPT/EntityNaming).
+   If you want to use something other than `*.vagrant.test`, you will also need to
+   [configure landrush's TLD](https://github.com/vagrant-landrush/landrush#wildcard-subdomains).
 
 3. To bring up the VM, run `vagrant up`. This will install the SP and [configure](http://www.testshib.org/configure.html)
    it with a `shibboleth2.xml` file downloaded from Testshib.
