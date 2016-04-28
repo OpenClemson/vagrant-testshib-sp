@@ -31,3 +31,13 @@ shibd:
 # TODO: Add this once the metadata state is switched to file.managed
 #    - watch:
 #      - file: /etc/shibboleth/shibboleth2.xml
+
+secure_sessions:
+  file.line:
+    - name: /etc/shibboleth/shibboleth2.xml
+    - match: <Sessions
+    - content: <Sessions lifetime="28800" timeout="3600" checkAddress="false" relayState="ss:mem" handlerSSL="true" cookieProps="https">
+    - mode: Replace
+    - indent: True
+    - require:
+      - cmd: metadata
