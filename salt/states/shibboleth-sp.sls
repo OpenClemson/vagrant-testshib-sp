@@ -22,16 +22,6 @@ metadata:
     - require:
       - pkg: curl
 
-shibd:
-  service.running:
-    - enable: True
-    - require:
-      - pkg: shibboleth
-      - selinux: permissive
-# TODO: Add this once the metadata state is switched to file.managed
-#    - watch:
-#      - file: /etc/shibboleth/shibboleth2.xml
-
 secure_sessions:
   file.line:
     - name: /etc/shibboleth/shibboleth2.xml
@@ -41,3 +31,35 @@ secure_sessions:
     - indent: True
     - require:
       - cmd: metadata
+
+enable_eduperson_example_attributes:
+  file.replace:
+    - name: /etc/shibboleth/attribute-map.xml
+    - pattern: (<!-- Some more eduPerson attributes, uncomment these to use them... -->)\n\s*<!--(.*?)-->
+    - repl: \1\n\2
+    - flags:
+      - DOTALL
+      - MULTILINE
+    - require:
+      - cmd: metadata
+
+enable_ldap_example_attributes:
+  file.replace:
+    - name: /etc/shibboleth/attribute-map.xml
+    - pattern: (<!-- Examples of LDAP-based attributes, uncomment to use these... -->)\n\s*<!--(.*?)-->
+    - repl: \1\n\2
+    - flags:
+      - DOTALL
+      - MULTILINE
+    - require:
+      - cmd: metadata
+
+shibd:
+  service.running:
+    - enable: True
+    - require:
+      - pkg: shibboleth
+      - selinux: permissive
+# TODO: Add this once the metadata state is switched to file.managed
+#    - watch:
+#      - file: /etc/shibboleth/shibboleth2.xml
