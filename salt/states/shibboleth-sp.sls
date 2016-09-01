@@ -11,16 +11,11 @@ shibboleth:
     - require:
       - pkgrepo: shibboleth-repo
 
-# TODO: No need for this after metadata is fetched with file.managed
-curl:
-  pkg.installed
-
-# TODO: Convert this to file.managed once https://github.com/saltstack/salt/pull/31265 becomes available.
 metadata:
-  cmd.run:
-    - name: curl -k "https://www.testshib.org/cgi-bin/sp2config.cgi?dist=Others&hostname=$(hostname)" > /etc/shibboleth/shibboleth2.xml
-    - require:
-      - pkg: curl
+  file.managed:
+    - name: /etc/shibboleth/shibboleth2.xml
+    - source: https://www.testshib.org/cgi-bin/sp2config.cgi?dist=Others&hostname={{ salt["network"].get_hostname() }}
+    - skip_verify: true
 
 secure_sessions:
   file.line:
@@ -30,7 +25,7 @@ secure_sessions:
     - mode: Replace
     - indent: True
     - require:
-      - cmd: metadata
+      - file: metadata
 
 enable_eduperson_example_attributes:
   file.replace:
@@ -41,7 +36,7 @@ enable_eduperson_example_attributes:
       - DOTALL
       - MULTILINE
     - require:
-      - cmd: metadata
+      - file: metadata
 
 enable_ldap_example_attributes:
   file.replace:
@@ -52,7 +47,7 @@ enable_ldap_example_attributes:
       - DOTALL
       - MULTILINE
     - require:
-      - cmd: metadata
+      - file: metadata
 
 shibd:
   service.running:
@@ -60,6 +55,6 @@ shibd:
     - require:
       - pkg: shibboleth
       - selinux: permissive
-# TODO: Add this once the metadata state is switched to file.managed
-#    - watch:
-#      - file: /etc/shibboleth/shibboleth2.xml
+    - watch:
+      - file: /etc/shibboleth/attribute-map.xml
+      - file: /etc/shibboleth/shibboleth2.xml
