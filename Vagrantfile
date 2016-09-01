@@ -18,7 +18,7 @@ Vagrant.configure(2) do |config|
   config.vm.provision :salt do |salt|
 
     salt.install_type = "git"
-    salt.install_args = "v2015.8.8.2"
+    salt.install_args = "v2016.3.3"
 
     salt.masterless = true
     salt.run_highstate = true
